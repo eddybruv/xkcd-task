@@ -36,6 +36,11 @@ function Main() {
 
   useEffect(() => {
     const fetchSpecificComic = async () => {
+      if (Number(location.pathname.slice("/")[0]) > lastPage) {
+        alert("Page doesn't exist");
+        return;
+      }
+
       const res = await axios.get(`/api${location.pathname}`);
       setData(res.data);
       console.log(res.data.transcript);
@@ -84,7 +89,6 @@ function Main() {
           {showTranscript ? "Hide Transcript" : "Show Transcript"}
         </button>
         <div>
-
           {showTranscript &&
             (data.transcript ? (
               data.transcript.split("\n").map((text) => <p>{text}</p>)
