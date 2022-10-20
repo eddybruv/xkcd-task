@@ -1,0 +1,43 @@
+.body {
+  width: 100%;
+}
+
+.imgDiv {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.img {
+  width: 100%;
+  height: auto;
+}
+
+.title {
+  color: #e9c46a;
+  text-align: center;
+  padding-bottom: 2rem;
+  text-transform: uppercase;
+  font-family: "Montserrat";
+}
+
+.buttons {
+  margin-top: 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  padding: 8px 16px;
+  margin-right: 1rem;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  background-color: #e76f51;
+  text-transform: uppercase;
+  font-family: "Montserrat";
+}
+
+.transcript {
+  color: white;
+}
