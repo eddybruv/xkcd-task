@@ -1,10 +1,33 @@
 .body {
   width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+}
+
+.content {
+  margin-top: 1rem;
+  width: 780px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+.logoDiv {
+  width: auto;
+  height: auto;
+}
+
+.logo {
+  width: auto;
+  height: 100px;
 }
 
 .imgDiv {
-  width: 70%;
-  margin: 0 auto;
+  width: auto;
+  height: auto;
 }
 
 .img {
@@ -15,16 +38,39 @@
 .title {
   color: #e9c46a;
   text-align: center;
-  padding-bottom: 2rem;
   text-transform: uppercase;
   font-family: "Montserrat";
 }
 
+.date {
+  color: #e9c46a;
+  text-align: center;
+  text-transform: uppercase;
+  /* font-family: "Montserrat"; */
+}
+
+.info {
+  padding-bottom: 1rem;
+}
+
 .buttons {
-  margin-top: 2rem;
+  margin: 2rem 0;
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+.TranscriptButton {
+  border: none;
+  outline: none;
+  padding: 6px 12px;
+  margin-right: 1rem;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  background-color: #2a9d8f;
+  color: white;
 }
 
 .button {
@@ -36,8 +82,22 @@
   background-color: #e76f51;
   text-transform: uppercase;
   font-family: "Montserrat";
+  transition: all 0.5s ease-in-out;
+}
+
+.button:hover {
+  cursor: pointer;
+  background-color: #f4a261;
+  transform: translateY(-5px);
 }
 
 .transcript {
   color: white;
+  width: 100%;
+}
+
+@media only screen and (max-width: 780px) {
+  .content {
+    width: 100%;
+  }
 }
