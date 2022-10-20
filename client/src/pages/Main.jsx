@@ -12,7 +12,7 @@ function Main() {
 
   const [data, setData] = useState({});
   const [lastPage, setLastPage] = useState(0);
-  const [showTranscript, setShowTranscript] = useState(true);
+  const [showTranscript, setShowTranscript] = useState(false);
 
   const handleNext = () => {
     const num = data.num + 1;
@@ -31,20 +31,21 @@ function Main() {
 
   const handleShowTranscript = () => {
     setShowTranscript(!showTranscript);
-    console.log("here");
   };
 
   useEffect(() => {
     const fetchSpecificComic = async () => {
-      if (Number(location.pathname.slice("/")[0]) > lastPage) {
-        alert("Page doesn't exist");
-        return;
-      }
+      await axios
+        .get(`/api${location.pathname}`)
+        .then((data) => {
+          setData(data.data);
+        })
+        .catch((data) => {
+          if (data.response.data.message === "page not found") {
+            navigate("/");
+          }
+        });
 
-      const res = await axios.get(`/api${location.pathname}`);
-      setData(res.data);
-      console.log(res.data.transcript);
-      console.log(res.data);
       if (lastPage === 0) {
         const lastPageNum = await axios.get("/api/");
         setLastPage(lastPageNum.data.num);
@@ -91,7 +92,9 @@ function Main() {
         <div>
           {showTranscript &&
             (data.transcript ? (
-              data.transcript.split("\n").map((text) => <p>{text}</p>)
+              data.transcript
+                .split("\n")
+                .map((text, index) => <p key={index}>{text}</p>)
             ) : (
               <p>No transcript Available</p>
             ))}
