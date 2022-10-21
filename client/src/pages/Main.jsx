@@ -6,7 +6,7 @@ import style from "../styles/Main.module.css";
 import logo from "../assets/images/logo.png";
 
 function Main() {
-  const location = useLocation();
+  const { pathname } = useLocation();
   const navigate = useNavigate();
 
   const [data, setData] = useState({});
@@ -14,11 +14,21 @@ function Main() {
   const [showTranscript, setShowTranscript] = useState(false);
 
   const handleNext = () => {
+    if (pathname.split("/")[1] === `${lastPage}`) {
+      navigate("/1");
+      return;
+    }
+
     const num = data.num + 1;
     navigate(`/${num}`);
   };
 
   const handlePrev = () => {
+    if (pathname.split("/")[1] === "1") {
+      navigate("/");
+      return;
+    }
+
     const num = data.num - 1;
     navigate(`/${num}`);
   };
@@ -32,10 +42,15 @@ function Main() {
     setShowTranscript(!showTranscript);
   };
 
+  const checkData = () => {
+    if (Object.keys(data).length === 0) return false;
+    return true;
+  };
+
   useEffect(() => {
     const fetchSpecificComic = async () => {
       await axios
-        .get(`/api${location.pathname}`)
+        .get(`/api${pathname}`)
         .then((data) => {
           setData(data.data);
         })
@@ -52,7 +67,7 @@ function Main() {
     };
 
     fetchSpecificComic();
-  }, [location, lastPage, navigate]);
+  }, [pathname, lastPage, navigate]);
 
   return (
     <div className={style.body}>
@@ -72,36 +87,41 @@ function Main() {
             Next
           </button>
         </div>
-        <div className={style.info}>
-          <h2 className={style.title}>{data && data.title}</h2>
-          <p className={style.date}>
-            Date created: {`${data.year}-${data.month}-${data.day}`}
-          </p>
-          <p className={style.count}>Count: {data.count}</p>
-        </div>
+        {checkData() ? (
+          <>
+            <div className={style.info}>
+              <h2 className={style.title}>{data && data.title}</h2>
+              <p className={style.date}>
+                Date created: {`${data.year}-${data.month}-${data.day}`}
+              </p>
+              <p className={style.count}>Count: {data.count}</p>
+            </div>
 
-        <div className={style.imgDiv}>
-          {data && <img className={style.img} src={data.img} alt="" />}
-        </div>
-        <button
-          onClick={handleShowTranscript}
-          className={style.TranscriptButton}
-        >
-          {showTranscript ? "Hide Transcript" : "Show Transcript"}
-        </button>
-        <div>
-          {showTranscript &&
-            (data.transcript ? (
-              data.transcript.split("\n").map((text, index) => (
-                <p className={style.transcript} key={index}>
-                  {text}
-                </p>
-              ))
-            ) : (
-              <p>No transcript Available</p>
-            ))}
-        </div>
-
+            <div className={style.imgDiv}>
+              {data && <img className={style.img} src={data.img} alt="" />}
+            </div>
+            <button
+              onClick={handleShowTranscript}
+              className={style.TranscriptButton}
+            >
+              {showTranscript ? "Hide Transcript" : "Show Transcript"}
+            </button>
+            <div>
+              {showTranscript &&
+                (data.transcript ? (
+                  data.transcript.split("\n").map((text, index) => (
+                    <p className={style.transcript} key={index}>
+                      {text}
+                    </p>
+                  ))
+                ) : (
+                  <p>No transcript Available</p>
+                ))}
+            </div>
+          </>
+        ) : (
+          <div className={style.loader}></div>
+        )}
         <div className={style.buttons}>
           <button className={style.button} onClick={handlePrev}>
             Prev
