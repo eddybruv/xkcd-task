@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import style from "../styles/Main.module.css";
 import logo from "../assets/images/logo.png";
-import TranscriptModal from "../components/TranscriptModal";
 
 function Main() {
   const location = useLocation();
@@ -53,7 +52,7 @@ function Main() {
     };
 
     fetchSpecificComic();
-  }, [location]);
+  }, [location, lastPage, navigate]);
 
   return (
     <div className={style.body}>
@@ -78,6 +77,7 @@ function Main() {
           <p className={style.date}>
             Date created: {`${data.year}-${data.month}-${data.day}`}
           </p>
+          <p className={style.count}>Count: {data.count}</p>
         </div>
 
         <div className={style.imgDiv}>
@@ -92,9 +92,11 @@ function Main() {
         <div>
           {showTranscript &&
             (data.transcript ? (
-              data.transcript
-                .split("\n")
-                .map((text, index) => <p key={index}>{text}</p>)
+              data.transcript.split("\n").map((text, index) => (
+                <p className={style.transcript} key={index}>
+                  {text}
+                </p>
+              ))
             ) : (
               <p>No transcript Available</p>
             ))}
