@@ -36,7 +36,8 @@ function Main() {
 
   const handleRandom = () => {
     const num = Math.floor(Math.random() * lastPage);
-    navigate(`/${num}`);
+    if (num === 0) navigate("/1");
+    else navigate(`/${num}`);
   };
 
   const handleHome = () => {
@@ -69,7 +70,6 @@ function Main() {
 
     // firstRender.current is true by default
     fetchSpecificComic();
-    console.log("here");
     firstRender.current = false;
   }, [pathname, navigate]);
 
