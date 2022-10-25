@@ -71,7 +71,7 @@ function Main() {
     if (!firstRender.current) {
       fetchSpecificComic();
     }
-
+    console.log("here");
     firstRender.current = false;
   }, [pathname, navigate]);
 
