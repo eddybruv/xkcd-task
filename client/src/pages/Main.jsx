@@ -68,9 +68,7 @@ function Main() {
     };
 
     // firstRender.current is true by default
-    if (!firstRender.current) {
-      fetchSpecificComic();
-    }
+    fetchSpecificComic();
     console.log("here");
     firstRender.current = false;
   }, [pathname, navigate]);
