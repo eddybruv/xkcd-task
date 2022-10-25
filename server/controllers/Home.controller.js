@@ -13,7 +13,9 @@ const HomeController = async (_req, res) => {
       count: 1,
     });
 
-    return res.status(200).json({ ...data, count: newStrip.count });
+    return res
+      .status(200)
+      .json({ ...data, count: newStrip.count, lastNum: data.num });
   } else {
     const newCount = strip[0].count + 1;
     const updatedStrip = await CountSchemaModel.findOneAndUpdate(
@@ -22,12 +24,15 @@ const HomeController = async (_req, res) => {
       { new: true }
     );
 
-    return res.status(200).json({ ...data, count: updatedStrip.count });
+    return res
+      .status(200)
+      .json({ ...data, count: updatedStrip.count, lastNum: data.num });
   }
 };
 
 const SpecificController = async (req, res) => {
   const id = req.params.id;
+
 
   if (id === "NaN" || Number(id) > lastPage || Number(id) <= 0) {
     return res.status(400).json({ message: "page not found" });
