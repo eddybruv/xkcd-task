@@ -75,10 +75,6 @@ function Main() {
     firstRender.current = false;
   }, [pathname, navigate]);
 
-  useEffect(() => {
-    console.log("last num", lastPage);
-  }, [lastPage]);
-
   return (
     <div className={style.body}>
       <div className={style.content}>
