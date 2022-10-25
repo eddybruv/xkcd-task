@@ -35,9 +35,14 @@ function Main() {
   };
 
   const handleRandom = () => {
-    const num = Math.floor(Math.random() * lastPage);
-    if (num === 0) navigate("/1");
-    else navigate(`/${num}`);
+    if (lastPage === 0) {
+      const num = Math.floor(Math.random() * 2688);
+      navigate(`/${num}`);
+    } else {
+      const num = Math.floor(Math.random() * lastPage);
+      if (num === 0) navigate("/1");
+      else navigate(`/${num}`);
+    }
   };
 
   const handleHome = () => {
