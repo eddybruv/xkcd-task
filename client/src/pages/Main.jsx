@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -8,13 +8,14 @@ import logo from "../assets/images/logo.png";
 function Main() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const firstRender = useRef(true);
 
   const [data, setData] = useState({});
   const [lastPage, setLastPage] = useState(0);
   const [showTranscript, setShowTranscript] = useState(false);
 
   const handleNext = () => {
-    if (pathname.split("/")[1] === `${lastPage}`) {
+    if (pathname.split("/")[1] === `${lastPage}` || pathname === "/") {
       navigate("/1");
       return;
     }
@@ -38,6 +39,10 @@ function Main() {
     navigate(`/${num}`);
   };
 
+  const handleHome = () => {
+    navigate("/");
+  };
+
   const handleShowTranscript = () => {
     setShowTranscript(!showTranscript);
   };
@@ -53,21 +58,26 @@ function Main() {
         .get(`/api${pathname}`)
         .then((data) => {
           setData(data.data);
+          if (data.data.lastNum) setLastPage(data.data.lastNum);
         })
         .catch((data) => {
           if (data.response.data.message === "page not found") {
             navigate("/");
           }
         });
-
-      if (lastPage === 0) {
-        const lastPageNum = await axios.get("/api/");
-        setLastPage(lastPageNum.data.num);
-      }
     };
 
-    fetchSpecificComic();
-  }, [pathname, lastPage, navigate]);
+    // firstRender.current is true by default
+    if (!firstRender.current) {
+      fetchSpecificComic();
+    }
+
+    firstRender.current = false;
+  }, [pathname, navigate]);
+
+  useEffect(() => {
+    console.log("last num", lastPage);
+  }, [lastPage]);
 
   return (
     <div className={style.body}>
@@ -75,6 +85,9 @@ function Main() {
         <div className={style.logoDiv}>
           <img className={style.logo} src={logo} alt="" />
         </div>
+        <button className={style.button} onClick={handleHome}>
+          Home
+        </button>
         <div className={style.buttons}>
           <button className={style.button} onClick={handlePrev}>
             Prev
@@ -111,7 +124,11 @@ function Main() {
                 (data.transcript ? (
                   data.transcript.split("\n").map((text, index) => (
                     <p className={style.transcript} key={index}>
-                      {text}
+                      {text
+                        .replace("[[", "")
+                        .replace("]]", "")
+                        .replace("{{", "")
+                        .replace("}}", "")}
                     </p>
                   ))
                 ) : (
